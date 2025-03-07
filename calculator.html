@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combinatorial Calculator</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', sans-serif;
+            margin: 5px;
+            background-color: #ffffff;
+        }
+        .part {
+            padding: 20px ;
+            position: relative;
+        }
+        .part:nth-child(odd) {
+            background-color: #f4f4f9;
+        }
+        .part:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        h1 {
+            background-color: black; 
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+        footer {
+            text-align: center;
+            background: #333;
+            color: white;
+            padding: 15px 0;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        h2 {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            /* background-color: #eee; */
+            background-color: #464646;
+            color: white;
+        }
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+        }
+        button {
+            font-family: 'Times New Roman', sans-serif;
+            border-radius: 2px;
+            margin: 5px 0;
+            padding: 5px 10px;
+            background-color: #464646;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #000200;
+        }
+        .mathjax-cell {
+            text-align: center;
+            white-space: nowrap;
+        }
+        .author-table {
+            width: 50%;
+            margin: 0px auto;
+            background-color: #f4f4f9;
+        }
+        .author-table td {
+            padding: 10px;
+            border: none;
+        }
+
+        .author-table tr td + td {
+            border-left: 1px solid #ccc;
+        }
+
+        .author-photo {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .author-photo img {
+            
+            border-radius: 50%;
+        }
+
+        .author-info {
+            width: auto;
+            text-align: left;
+        }
+
+        .author-info p {
+            margin: 5px ;
+        }
+
+        .author-info a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .author-info a:hover {
+            text-decoration: underline;
+        }
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .initial-snow > * {
+            font-size: 30px;
+            color: white;
+            position: absolute;
+            top: -5vh;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translate3d(var(--left-ini), 0, 0);
+            }
+            100% {
+                transform: translate3d(var(--left-end), 110vh, 0);
+            }
+        }
+
+        .snow:nth-child(2n) { filter: blur(1px); }
+        .snow:nth-child(6n) { filter: blur(2px); }
+        .snow:nth-child(10n) { filter: blur(5px); }
+
+        .sleigh {
+            font-size: 1.3rem;
+            color: transparent;
+            text-shadow: 0 0 0 #06223f;
+            position: relative;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .santa {
+            animation-name: up, across;
+            animation-duration: 10s, 6.5s;
+            animation-timing-function: ease-in-out, linear;
+            animation-iteration-count: 1, 1;
+            animation-iteration-count: infinite, infinite;
+            animation-delay: 3s, 5s;
+            position: absolute;
+            right: -40px;
+            top: 3px;
+            z-index: 2;
+            filter: blur(1px);
+        }
+        .santa1 {
+            animation-name: up, across;
+            animation-duration: 10s, 6.5s;
+            animation-timing-function: ease-in-out, linear;
+            animation-iteration-count: 1, 1;
+            animation-iteration-count: infinite, infinite; /* 無限次重複 */
+            animation-delay: 3.2s, 5.1s;
+            position: absolute;
+            right: -40px;
+            top: 3px;
+            z-index: 2;
+            filter: blur(1px);
+        }
+        .santa2 {
+            animation-name: up, across;
+            animation-duration: 10s, 6.5s;
+            animation-timing-function: ease-in-out, linear;
+            animation-iteration-count: 1, 1;
+            animation-iteration-count: infinite, infinite; /* 無限次重複 */
+            animation-delay: 3.4s, 5.2s;
+            position: absolute;
+            right: -40px;
+            top: 3px;
+            z-index: 2;
+            filter: blur(1px);
+        }
+        .santa3 {
+            animation-name: up, across;
+            animation-duration: 10s, 6.5s;
+            animation-timing-function: ease-in-out, linear;
+            animation-iteration-count: 1, 1;
+            animation-iteration-count: infinite, infinite; /* 無限次重複 */
+            animation-delay: 3.6s, 5.3s;
+            position: absolute;
+            right: -40px;
+            top: 3px;
+            z-index: 2;
+            filter: blur(1px);
+        }
+        .santa4 {
+            animation-name: up, across;
+            animation-duration: 10s, 6.5s;
+            animation-timing-function: ease-in-out, linear;
+            animation-iteration-count: 1, 1;
+            animation-iteration-count: infinite, infinite; /* 無限次重複 */
+            animation-delay: 3.8s, 5.4s;
+            position: absolute;
+            right: -40px;
+            top: 3px;
+            z-index: 2;
+            filter: blur(1px);
+        }
+        .santa5 {
+            animation-name: up, across;
+            animation-duration: 10s, 6.5s;
+            animation-timing-function: ease-in-out, linear;
+            animation-iteration-count: 1, 1;
+            animation-delay: 4s, 5.6s;
+            position: absolute;
+            right: -40px;
+            top: 3px;
+            z-index: 2;
+            filter: blur(1px);
+            animation-iteration-count: infinite, infinite; /* 無限次重複 */
+        }
+
+        .fa-star {
+            color: #0b364f;
+        }
+
+        .fa-sleigh {
+            color: #06223f;
+            transform: scale(-1, 1);
+        }
+
+        @keyframes up {
+            0% {
+                transform: translateY(0%);
+            }
+
+            50% {
+                transform: translateY(100px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes across {
+            from {
+                right: 0%;
+            }
+
+            to {
+                right: 100%;
+            }
+        }
+        .fa-snowflake {
+            color: #ecf2f8;
+        }
+
+        .snowflake {
+            animation-name: fall, shake;
+            animation-duration: 10s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 200px;
+            z-index: 7;
+            filter: blur(0.5px);
+        }
+
+        .snowflake1 {
+            animation-name: fall, shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 500px;
+            top: -100px;
+            animation-delay: 1s, 1s;
+            z-index: 7;
+            filter: blur(0.5px);
+        }
+
+        .snowflake2 {
+            animation-name: fall, shake;
+            animation-duration: 8s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 20px;
+            top: -100px;
+            animation-delay: 2s, 2s;
+            z-index: 7;
+            filter: blur(0.5px);
+        }
+
+        .snowflake3 {
+            animation-name: fall, shake;
+            animation-duration: 9s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            right: 170px;
+            top: -100px;
+            animation-delay: 3s, 5s;
+            z-index: 5;
+            filter: blur(0.7px);
+        }
+
+        .snowflake4 {
+            animation-name: fall, shake;
+            animation-duration: 15s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            right: 430px;
+            top: -100px;
+            animation-delay: 4s, 4s;
+            z-index: 5;
+        }
+
+        .snowflake5 {
+            animation-name: fall, shake;
+            animation-duration: 15s, 4s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 500px;
+            top: -100px;
+            animation-delay: 6s, 2s;
+            font-size: 2rem;
+            z-index: 6;
+            filter: blur(0.5px);
+        }
+
+        .snowflake6 {
+            animation-name: fall, shake;
+            animation-duration: 12s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 75px;
+            top: -100px;
+            animation-delay: 3.2s, 2s;
+            font-size: 2rem;
+            z-index: 6;
+        }
+
+        .snowflake7 {
+            animation-name: fall, shake;
+            animation-duration: 11s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 650px;
+            top: -100px;
+            animation-delay: 7.2s, 1s;
+            z-index: 7;
+        }
+
+        .snowflake8 {
+            animation-name: fall, shake;
+            animation-duration: 12s, 4s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 820px;
+            top: -100px;
+            animation-delay: 4s, 2s;
+            font-size: 2rem;
+            z-index: 5;
+            filter: blur(0.5px);
+        }
+
+        .snowflake9 {
+            animation-name: fall, shake;
+            animation-duration: 12s, 4s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 170px;
+            top: -100px;
+            animation-delay: 5s, 2s;
+            font-size: 2rem;
+            z-index: 5;
+            filter: blur(0.3px);
+        }
+
+        .snowflake10 {
+            animation-name: fall, shake;
+            animation-duration: 15s, 9s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 350px;
+            top: -100px;
+            animation-delay: 2.7s, 2s;
+            font-size: 3rem;
+            z-index: 7;
+        }
+
+        .snowflake11 {
+            animation-name: fall, shake;
+            animation-duration: 12s, 7s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            right: 400px;
+            top: -100px;
+            animation-delay: 0.5s, 2s;
+            font-size: 3rem;
+            z-index: 7;
+        }
+
+        .snowflake12 {
+            /*small*/
+            animation-name: fall, shake;
+            animation-duration: 12s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            left: 470px;
+            top: -100px;
+            animation-delay: 5s, 2s;
+            z-index: 7;
+            filter: blur(0.9px);
+        }
+
+        .snowflake13 {
+            /*small*/
+            animation-name: fall, shake;
+            animation-duration: 10s, 5s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            right: 220px;
+            top: -100px;
+            animation-delay: 1s, 2s;
+            z-index: 7;
+            filter: blur(0.6px);
+        }
+
+        .snowflake14 {
+            /*small*/
+            animation-name: fall, shake;
+            animation-duration: 9s, 4s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            position: absolute;
+            right: 140px;
+            top: -100px;
+            animation-delay: 2s, 2s;
+            z-index: 7;
+            filter: blur(0.5px);
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translatex(0);
+            }
+            50% {
+                transform: translatex(50px);
+            }
+            100% {
+                transform: translatex(0);
+            }
+        }
+        .mountains {
+            width: 100%;
+            position: relative;
+            margin-top: 130px; /* 與 "Author Information" 保持距離 */
+            z-index: 1; /* 確保不干擾其他內容 */
+            pointer-events: none; /* 防止點擊影響操作 */
+            transform: scale(0.3);
+        }
+
+        .mt1 {
+            position: absolute;
+            content: "";
+            left: 100px;
+            bottom: 0;
+            border-top: 0px solid transparent;
+            border-right: 150px solid transparent;
+            border-left: 150px solid transparent;
+            border-bottom: 300px solid #0b364f;
+            z-index: 3;
+        }
+
+        .mtsnow1 {
+            position: absolute;
+            content: "";
+            left: -50px;
+            bottom: -100px;
+            border-top: 0px solid transparent;
+            border-right: 50px solid transparent;
+            border-left: 50px solid transparent;
+            border-bottom: 100px solid #c1cfd7;
+        }
+
+        .snow-peak-1a {
+            /*sharp snow edge*/
+            position: absolute;
+            content: "";
+            bottom: -130px;
+            left: -45px;
+            border-top: 30px solid #c1cfd7;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-1b {
+            position: absolute;
+            content: "";
+            bottom: -130px;
+            left: -7px;
+            border-top: 30px solid #c1cfd7;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .mt2 {
+            position: absolute;
+            content: "";
+            left: -20px;
+            bottom: 0;
+            border-top: 0px solid transparent;
+            border-right: 150px solid transparent;
+            border-left: 150px solid transparent;
+            border-bottom: 200px solid #094669;
+            z-index: 6;
+        }
+
+        .snow2 {
+            position: absolute;
+            content: "";
+            left: -75px;
+            bottom: -98px;
+            border-top: 0px solid transparent;
+            border-right: 75px solid transparent;
+            border-left: 75px solid transparent;
+            border-bottom: 100px solid #e4e8eb;
+        }
+
+        .snow-peak-2a {
+            position: absolute;
+            content: "";
+            bottom: -110px;
+            left: -60px;
+            border-top: 20px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-2b {
+            position: absolute;
+            content: "";
+            bottom: -120px;
+            left: -25px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-2c {
+            position: absolute;
+            content: "";
+            bottom: -110px;
+            right: -60px;
+            border-top: 20px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .mt3 {
+            position: absolute;
+            content: "";
+            left: 280px;
+            bottom: 0;
+            border-top: 0px solid transparent;
+            border-right: 150px solid transparent;
+            border-left: 150px solid transparent;
+            border-bottom: 175px solid #094669;
+            z-index: 6;
+        }
+
+        .snow3 {
+            position: absolute;
+            content: "";
+            left: -70px;
+            bottom: -80px;
+            border-top: 0px solid transparent;
+            border-right: 70px solid transparent;
+            border-left: 70px solid transparent;
+            border-bottom: 90px solid #e4e8eb;
+        }
+
+        .snow-peak-3a {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            left: -60px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-3b {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            left: -20px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-3c {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            right: -20px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-3d {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            right: -60px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .mt4 {
+            position: absolute;
+            content: "";
+            left: 800px;
+            bottom: 0;
+            border-top: 0px solid transparent;
+            border-right: 150px solid transparent;
+            border-left: 150px solid transparent;
+            border-bottom: 250px solid #0b364f;
+            z-index: 3;
+            
+        }
+
+        .snow4 {
+            position: absolute;
+            content: "";
+            left: -47px;
+            bottom: -75px;
+            border-top: 0px solid transparent;
+            border-right: 47px solid transparent;
+            border-left: 47px solid transparent;
+            border-bottom: 80px solid #c1cfd7;
+        }
+
+        .snow-peak-4a {
+            /*sharp snow edge*/
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            left: -45px;
+            border-top: 30px solid #c1cfd7;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        } /* the sharp snow edge an is INVERTED triangle, so we want to see the the top border,not bottom. Top border should have a color. Other borders should be transparent*/
+
+        .snow-peak-4b {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            left: -7px;
+            border-top: 30px solid #c1cfd7;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .mt5 {
+            position: absolute;
+            content: "";
+            left: 500px;
+            bottom: 0;
+            border-top: 0px solid transparent;
+            border-right: 200px solid transparent;
+            border-left: 200px solid transparent;
+            border-bottom: 150px solid #094669;
+            z-index: 6;
+        }
+
+        .snow5 {
+            position: absolute;
+            content: "";
+            left: -100px;
+            bottom: -75px;
+            border-top: 0px solid transparent;
+            border-right: 100px solid transparent;
+            border-left: 100px solid transparent;
+            border-bottom: 75px solid #e4e8eb;
+        }
+
+        .snow-peak-5a {
+            position: absolute;
+            content: "";
+            bottom: -95px;
+            left: -60px;
+            border-top: 20px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-5b {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            left: -25px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-5c {
+            position: absolute;
+            content: "";
+            bottom: -95px;
+            right: -60px;
+            border-top: 20px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .mt6 {
+            position: absolute;
+            content: "";
+            left: 950px;
+            bottom: 0;
+            border-top: 0px solid transparent;
+            border-right: 150px solid transparent;
+            border-left: 150px solid transparent;
+            border-bottom: 175px solid #094669;
+            z-index: 6;
+        }
+
+        .snow6 {
+            position: absolute;
+            content: "";
+            left: -70px;
+            bottom: -80px;
+            border-top: 0px solid transparent;
+            border-right: 70px solid transparent;
+            border-left: 70px solid transparent;
+            border-bottom: 90px solid #e4e8eb;
+        }
+
+        .snow-peak-6a {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            left: -60px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-6b {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            left: -20px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-6c {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            right: -20px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+        .snow-peak-6d {
+            position: absolute;
+            content: "";
+            bottom: -100px;
+            right: -60px;
+            border-top: 30px solid #e4e8eb;
+            border-right: 25px solid transparent;
+            border-bottom: 0px solid transparent;
+            border-left: 25px solid transparent;
+        }
+
+
+    </style>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+    
+    <h1>Combinatorial Calculator</h1>
+    <div class="part" style="padding: 1px;overflow: hidden;">
+        <h2>Author Information</h2>
+        <table class="author-table">
+            <colgroup>
+                <col style="width: 28%;">
+                <col style="width: 37%;">
+                <col style="width: 37%;">
+            </colgroup>
+            <tr>
+                <!-- 左侧头像 -->
+                <td class="author-photo">
+                    <img src="parrot not chicken.png" alt="Author Photo" style="width: 80px; height: auto;">
+                </td>
+                <!-- 右侧信息 -->
+                <td class="author-info">
+                    <p><strong>Author:</strong> Shih Ting Lin</p>
+                    <p><strong>Student ID:</strong> 313707021</p>
+                    <p><strong>Email:</strong> <a href="mailto:ki625219@gmail.com"> ki625219@gmail.com</a></p>
+                </td>
+                <td class="author-info">
+                    <p><strong>Course:</strong> Discrete mathematical</p>
+                    <p><strong>Class:</strong> Master of Finance</p>
+                    <p><strong>Date:</strong> Dec. 20, 2024</p>
+                </td>
+            </tr>
+        </table>
+        
+        <div class="sleigh">
+            <div class="santa">🦌</div>
+            <div class="santa1">🦌</div>
+            <div class="santa2">🦌</div>
+            <div class="santa3">🦌</div>
+            <div class="santa4">🦌</div>
+            <div class="santa5"><i class="fa-solid fa-sleigh"></i></div>           
+        </div>
+    
+        <div class="snowflake"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake1"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake2"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake3"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake4"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake5"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake6"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake7"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake8"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake9"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake10"><i class="fa-solid fa-snowflake"></i></div>
+        <div class="snowflake11"><i class="fa-solid fa-snowflake"></i></div>
+        <div class="snowflake12"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake13"><i class="fa-regular fa-snowflake"></i></div>
+        <div class="snowflake14"><i class="fa-regular fa-snowflake"></i></div>
+
+        <div class="mountains">
+            <div class='mt1'>
+                <div class="mtsnow1"></div>
+                <div class="snow-peak-1a"></div>
+                <div class="snow-peak-1b"></div>
+            </div>
+            <div class="mt2">
+                <div class="snow2"></div>
+                <div class="snow-peak-2a"></div>
+                <div class="snow-peak-2b"></div>
+                <div class="snow-peak-2c"></div>
+            </div>
+            <div class="mt3">
+                <div class="snow3"></div>
+                <div class="snow-peak-3a"></div>
+                <div class="snow-peak-3b"></div>
+                <div class="snow-peak-3c"></div>
+                <div class="snow-peak-3d"></div>
+            </div>
+            <div class='mt4'>
+                <div class="snow4"></div>
+                <div class="snow-peak-4a"></div>
+                <div class="snow-peak-4b"></div>
+            </div>
+            <div class="mt5">
+                <div class="snow5"></div>
+                <div class="snow-peak-5a"></div>
+                <div class="snow-peak-5b"></div>
+                <div class="snow-peak-5c"></div>
+            </div>
+            <div class="mt6">
+                <div class="snow6"></div>
+                <div class="snow-peak-6a"></div>
+                <div class="snow-peak-6b"></div>
+                <div class="snow-peak-6c"></div>
+                <div class="snow-peak-6d"></div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div class="part">
+        <h2>Combinations and Permutations</h2>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label for="n">\( n \) = </label>
+            <input type="number" id="n" value="7" min="0">
+            <label for="r">\( r \) = </label>
+            <input type="number" id="r" value="3" min="0">
+            <button onclick="computeAll()">Compute All</button>
+        </div>
+
+        <table>
+            <colgroup>
+                <col style="width: 12%;">
+                <col style="width: 12%;">
+                <col style="width: 12%;">
+                <col style="width: 12%;">
+                <col style="width: 12%;">
+                <col style="width: 45%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Formula</th>
+                    <th>Order Relevant</th>
+                    <th>Repetition</th>
+                    <th>Result</th>
+                    <th>Action</th>
+                    <th>Memo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>\( P(n, r) \)</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td id="permutation">-</td>
+                    <td><button onclick="computePermutation()">Compute</button></td>
+                    <td style="text-align: left;"># Permutations of size \( r \) from \( n \) distinct objects</td>
+                </tr>
+                <tr>
+                    <td>\( C(n, r) \)</td> 
+                    <td>No</td>
+                    <td>No</td>
+                    <td id="combination">-</td>
+                    <td><button onclick="computeCombination()">Compute</button></td>
+                    <td style="text-align: left;"># Selections/Combinations of size \( r \) from \( n \) distinct objects</td>
+                </tr>
+                <tr>
+                    <td>\( n \)<sup>\( r \)</sup></td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td id="arrangementWithRep">-</td>
+                    <td><button onclick="computeArrangementWithRep()">Compute</button></td>
+                    <td style="text-align: left;"># Arrangements with repetition of size \( r \) from \( n \) distinct objects</td>
+                </tr>
+                <tr>
+                    <td>\( C(r+n-1, r) \)</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td id="selectionWithRep">-</td>
+                    <td><button onclick="computeSelectionWithRep()">Compute</button></td>
+                    <td style="text-align: left;"># Selections with repetition of size \( r \) from \( n \) distinct objects</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="part">
+        <h2>Special Sequence</h2>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label for="sequenceN">\(n\) = </label>
+            <input type="number" id="sequenceN" value="5" min="1">
+            <button onclick="computeAllSequences()">Compute All Sequences</button>
+        </div>
+
+        <table>
+            <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 60%;">
+                <col style="width: 20%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Sequence</th>
+                    <th>Result</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Catalan Numbers</td>
+                    <td id="catalanNumbers">-</td>
+                    <td><button onclick="computeCatalanNumbers()">Compute</button></td>
+                </tr>
+                <tr>
+                    <td>Triangular Numbers</td>
+                    <td id="triangularNumbers">-</td>
+                    <td><button onclick="computeTriangularNumbers()">Compute</button></td>
+                </tr>
+                <tr>
+                    <td>Harmonic Numbers</td>
+                    <td id="harmonicNumbers">-</td>
+                    <td><button onclick="computeHarmonicNumbers()">Compute</button></td>
+                </tr>
+                <tr>
+                    <td>Fibonacci Numbers</td>
+                    <td id="fibonacciNumbers">-</td>
+                    <td><button onclick="computeFibonacciNumbers()">Compute</button></td>
+                </tr>
+                <tr>
+                    <td>Lucas Numbers</td>
+                    <td id="lucasNumbers">-</td>
+                    <td><button onclick="computeLucasNumbers()">Compute</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="part">
+        <h2>Eulerian Numbers</h2>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label for="m">\(m\) = </label>
+            <input type="number" id="m" value="5" min="1" >
+            <label for="k">\(k\) = </label>
+            <input type="number" id="k" value="0" min="0" >
+        </div>
+
+        <table>
+            <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 60%;">
+                <col style="width: 20%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Sequence</th>
+                    <th>Result</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Eulerian Numbers</td>
+                    <td id="euleriannumbers">-</td>
+                    <td><button onclick="computeEulerianNumbers()">Compute</button></td>
+                </tr>
+        </table>
+    </div>
+
+    <div class="part">
+        <h2>Stirling Numbers of the Second Kind</h2>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label for="mStirling">\(m\) = </label>
+            <input type="number" id="mStirling" value="5" min="1">
+            <label for="nStirling">\(n\) = </label>
+            <input type="number" id="nStirling" value="3" min="1">
+        </div>
+
+        <table>
+            <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 60%;">
+                <col style="width: 20%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Sequence</th>
+                    <th>Result</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Stirling Numbers</td>
+                    <td id="stirlingNumbers">-</td>
+                    <td><button onclick="computeStirlingNumbers()">Compute</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="part">
+        <h2>Bonus</h2>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label for="bonus_m">\(m\) = </label>
+            <input type="number" id="bonus_m" value="5" min="1">
+            <label for="bonus_n">\(n\) = </label>
+            <input type="number" id="bonus_n" value="3" min="1">
+            <button onclick="computeAllBonus()">Compute All Formula</button>
+        </div>
+
+        <table>
+            <colgroup>
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 40%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Number of Distributions</th>
+                    <th>Distinct objects (\(m\))</th>
+                    <th>Distinct containers (\(n\))</th>
+                    <th>Some empty containers</th>
+                    <th>Result</th>
+                    <th>Action</th>
+                    <th>Interpretation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="formula">\( n^m \)</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td id="n^m">-</td>
+                    <td><button onclick="computePowerFormula()">Compute</button></td>
+                    <td style="text-align: left;"># Each of the \(m\) distinct objects may be distributed into any of the \(n\) distinct containers</td>
+                </tr>
+                <tr>
+                    <td class="formula">\( n! \cdot S(m, n) \)</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td id="n!S(m,n)">-</td>
+                    <td><button onclick="computeStirlingFactorialFormula()">Compute</button></td>
+                    <td style="text-align: left;"># Each of the \(m\) distinct objects may be distributed onto any of the \(n\) distinct containers with no containers empty</td>
+                </tr>
+                <tr>
+                    <td class="formula">\( S(m, 1) + S(m, 2) + \dots + S(m, n) \)</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td id="sumS(m,n)">-</td>
+                    <td><button onclick="computeSumOfStirlingNumbers()">Compute</button></td>
+                    <td style="text-align: left;"># \(m\) distinct objects onto \(1,2,\dots,n\) identical containers, leaving no container empty \( S(m, 1) + S(m, 2) + \dots + S(m, n) \)</td>
+                </tr>
+                <tr>
+                    <td class="formula">\( S(m, n) \)</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td id="S(m,n)">-</td>
+                    <td><button onclick="b_computeStirlingNumbers()">Compute</button></td>
+                    <td style="text-align: left;"># \(m\) distinct objects onto \(n\) identical containers, leaving no container empty</td>
+                </tr>
+                <tr>
+                    <td class="formula">\( \binom{n + m - 1}{m} \)</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td id="(n+m-1,m)">-</td>
+                    <td><button onclick="computeBinomialFormula()">Compute</button></td>
+                    <td style="text-align: left;"># Ordering food from the view of the kitchen (\(m\) kids (identical), \(n\) foods (distinct)): \(m\) identical pennies into \(n\) distinct containers; nonnegative integer solutions for an equation</td>
+                </tr>
+                <tr>
+                    <td class="formula">\( \binom{m - 1}{m - n} \)</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td id="(m-1,m-n)">-</td>
+                    <td><button onclick="computeAdjustedBinomialFormula()">Compute</button></td>
+                    <td style="text-align: left;"># Deliver one object to each of the n distinct containers first, then distribute \(m−n\) objects to the \(n\) containers</td>
+                </tr>
+                <tr>
+                    <td class="formula">\( p(m, 1) + p(m, 2) + \dots + p(m, n) \)</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td id="sump(m,n)">-</td>
+                    <td><button onclick="computeSumOfPartitionNumbers()">Compute</button></td>
+                    <td style="text-align: left;"># Partition integer \(m\) into at most \(n\) summands (with some 0 summands, corresponding to empty containers)</td>
+                </tr>
+                <tr>
+                    <td class="formula">\( p(m, n) \)</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td id="p(m,n)">-</td>
+                    <td><button onclick="computePartitionNumbers()">Compute</button></td>
+                    <td style="text-align: left;"># Partition integer \(m\) into exactly \(n\) summands (with no container empty)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+        // Compute and display combinatorial formulas
+        function permutation(n, r) {
+            if (n >= r) return factorial(n) / factorial(n - r);
+            return 0;
+        }
+
+        function combination(n, r) {
+            if (n >= r) return factorial(n) / (factorial(r) * factorial(n - r));
+            return 0;
+        }
+
+        function arrangementWithRepetition(n, r) {
+            return Math.pow(n, r);
+        }
+
+        function selectionWithRepetition(n, r) {
+            if (n==0 && r==0) return 1;
+            return combination(n + r - 1, r);
+        }
+
+        // Helper functions for sequences
+        function factorial(num) {
+            if (num === 0 || num === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= num; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function catalanNumber(n) {
+            return factorial(2 * (n+1)) / (factorial(n + 2) * factorial(n+1));
+        }
+
+        function triangularNumber(n) {
+            return (n * (n + 1)) / 2;
+        }
+
+        function harmonicNumber(n) {
+            let sum = 0;
+            for (let i = 1; i <= n; i++) {
+                sum += 1 / i;
+            }
+            return sum.toFixed(5);
+        }
+
+        function fibonacciNumbers(n) {
+            const result = [1, 1]; // 修改起始數列，從 [1, 1] 開始
+            for (let i = 2; i < n; i++) {
+                result.push(result[i - 1] + result[i - 2]);
+            }
+            return result.slice(0, n);
+        }
+
+        function lucasNumbers(n) {
+            const result = [1, 3]; // 修改起始數列，從 [1, 3] 開始
+            for (let i = 2; i < n; i++) {
+                result.push(result[i - 1] + result[i - 2]);
+            }
+            return result.slice(0, n);
+        }
+
+        // function updateKValue() {
+        //     const m = parseInt(document.getElementById("m").value);
+        //     const k = document.getElementById("k");
+
+        //     // 更新k的最大值
+        //     k.setAttribute("max", m - 1);
+
+        //     // 如果k大於新的最大值，更新k的值為m-1
+        //     if (parseInt(k.value) > m - 1) {
+        //         k.value = m - 1;
+        //     }
+        // }
+
+        // // 驗證k的數值是否在有效範圍內
+        // function validateK() {
+        //     const m = parseInt(document.getElementById("m").value);
+        //     const k = parseInt(document.getElementById("k").value);
+
+        //     if (k < 0 || k >= m) {
+        //         alert(`題目有說需符合範圍 0<=k<=m-1 請重新輸入!`);
+        //         // 將k恢復為有效範圍內的數字
+        //         document.getElementById("k").value = Math.min(Math.max(k, 0), m - 1);
+        //     }
+        // }
+
+        function eulerianNumbers(m, k) {
+            // Initialize a (m+1) x (k+1) matrix
+            const A = Array.from({ length: m + 1 }, () => Array(k + 1).fill(0));
+
+            // Start from A(1, 0) = 1
+            A[1][0] = 1;
+
+            // Use the recurrence relation to calculate other Eulerian numbers
+            for (let i = 2; i <= m; i++) { // Start from i = 2
+                for (let j = 0; j <= Math.min(i - 1, k); j++) { // Ensure j is valid
+                    if (j > 0) {
+                        A[i][j] += (i - j) * A[i - 1][j - 1]; // First term
+                    }
+                    A[i][j] += (j + 1) * A[i - 1][j]; // Second term
+                }
+            }
+
+            // Return the calculated Eulerian number A(m, k)
+            return A[m][k];
+        }
+        function stirlingNumber(m, n) {
+
+            const S = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+            // Base case: S(0, 0) = 1
+            S[0][0] = 1;
+
+            // Recurrence relation for Stirling numbers of the second kind
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    S[i][j] = j * S[i - 1][j] + S[i - 1][j - 1];
+                }
+            }
+
+            // Return the Stirling number S(m, n)
+            return S[m][n];
+        }
+        function powerFormula(n, m) {
+            return Math.pow(n, m);
+        }
+
+        function stirlingFactorialFormula(m, n) {
+            return factorial(n) * stirlingNumber(m, n);
+        }
+
+        function factorial(num) {
+            if (num === 0 || num === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= num; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+
+        // Sum of Stirling numbers: S(m, 1) + S(m, 2) + ... + S(m, n)
+        function sumOfStirlingNumbers(m, n) {
+            let sum = 0;
+            for (let i = 1; i <= n; i++) {
+                sum += stirlingNumber(m, i);
+            }
+            return sum;
+        }
+        function binomialCoefficient(n, k) {
+            if (k > n) return 0;
+            return factorial(n) / (factorial(k) * factorial(n - k));
+        }
+
+        function binomialFormula(m, n) {
+            return binomialCoefficient(m + n - 1, m);
+        }
+
+        // Combinatorial formula: \binom{m-1}{m-n}
+        function adjustedBinomialFormula(m, n) {
+            if (n > m) return 0;
+            return binomialCoefficient(m - 1, m - n);
+        }
+
+        // Partition formula: p(m, n)
+        function partitionNumbers(m, n) {
+            if (n === m) return 1; // Base case: p(m, m) = 1
+            const p = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    if( i==0 || j==0) {
+                        p[i][j] = 0;
+                    }
+                    else if (j > i) {
+                        p[i][j] = 0;
+                    }
+                    else if (i==1 && j==1) {
+                        p[i][j] = 1;
+                    }
+                    else {
+                        p[i][j] = p[i - 1][j - 1] + p[i - j][j];
+                    }
+                }
+            }
+            return p[m][n];
+        }
+
+        function sumOfPartitionNumbers(m, n) {
+            // if (n === m) return 1; // Base case: p(m, m) = 1
+
+            let sum = 0;
+            for (let i = 1; i <= n; i++) {
+                sum += partitionNumbers(m, i);
+            }
+            return sum;
+        }
+
+        // Compute and display sequences
+        function computePermutation() {
+            const n = parseInt(document.getElementById("n").value);
+            const r = parseInt(document.getElementById("r").value);
+            document.getElementById("permutation").textContent = permutation(n, r);
+        }
+
+        function computeCombination() {
+            const n = parseInt(document.getElementById("n").value);
+            const r = parseInt(document.getElementById("r").value);
+            document.getElementById("combination").textContent = combination(n, r);
+        }
+
+        function computeArrangementWithRep() {
+            const n = parseInt(document.getElementById("n").value);
+            const r = parseInt(document.getElementById("r").value);
+            document.getElementById("arrangementWithRep").textContent = arrangementWithRepetition(n, r);
+        }
+
+        function computeSelectionWithRep() {
+            const n = parseInt(document.getElementById("n").value);
+            const r = parseInt(document.getElementById("r").value);
+            document.getElementById("selectionWithRep").textContent = selectionWithRepetition(n, r);
+        }
+
+        function computeCatalanNumbers() {
+            const n = parseInt(document.getElementById("sequenceN").value);
+            const catalan = Array.from({ length: n }, (_, i) => catalanNumber(i));
+            document.getElementById("catalanNumbers").textContent = catalan.join(", ");
+        }
+
+        function computeTriangularNumbers() {
+            const n = parseInt(document.getElementById("sequenceN").value);
+            const triangular = Array.from({ length: n }, (_, i) => triangularNumber(i + 1));
+            document.getElementById("triangularNumbers").textContent = triangular.join(", ");
+        }
+
+        function computeHarmonicNumbers() {
+            const n = parseInt(document.getElementById("sequenceN").value);
+            const harmonic = Array.from({ length: n }, (_, i) => harmonicNumber(i + 1));
+            document.getElementById("harmonicNumbers").textContent = harmonic.join(", ");
+        }
+
+        function computeFibonacciNumbers() {
+            const n = parseInt(document.getElementById("sequenceN").value);
+            const fibonacci = fibonacciNumbers(n);
+            document.getElementById("fibonacciNumbers").textContent = fibonacci.join(", ");
+        }
+
+        function computeLucasNumbers() {
+            const n = parseInt(document.getElementById("sequenceN").value);
+            const lucas = lucasNumbers(n);
+            document.getElementById("lucasNumbers").textContent = lucas.join(", ");
+        }
+
+        function computeEulerianNumbers() {
+            const m = parseInt(document.getElementById("m").value);
+            const k = parseInt(document.getElementById("k").value);
+            // Verify that k is within the valid range
+            if (k < 0 || k >= m) {
+                alert(`題目有說需符合範圍 0 <= k <= m-1. 請重新輸入!`);
+                return;  // Exit the function if the condition is not met
+            }
+            // Compute the Eulerian numbers sequence for k = 0 to m-1
+            let eulerianSequence = [];
+                for (let k = 0; k < m; k++) {
+                    const eulerian = eulerianNumbers(m, k);
+                    eulerianSequence.push(eulerian);
+                }
+
+                // Display the Eulerian numbers sequence
+                document.getElementById("euleriannumbers").textContent = eulerianSequence.join(", ");
+        }
+
+        function computeStirlingNumbers() {
+            const m = parseInt(document.getElementById("mStirling").value);
+            const n = parseInt(document.getElementById("nStirling").value);
+            if (n < 1 || n > m) {
+                alert("題目有說需符合範圍 1 <= n <= m. 請重新輸入!");
+                return;
+            }
+            // Compute the Stirling number and display it
+            const stirling = stirlingNumber(m, n);
+            document.getElementById("stirlingNumbers").textContent = stirling
+        }
+        function b_computeStirlingNumbers() {
+            const b_n = parseInt(document.getElementById("bonus_n").value);
+            const b_m = parseInt(document.getElementById("bonus_m").value);
+            if (b_n < 1 || b_n > b_m) {
+                alert("題目有說需符合範圍 1 <= n <= m. 請重新輸入!");
+                return;
+            }
+            // Compute the Stirling number and display it
+            const b_stirling = stirlingNumber(b_m,b_n);
+            document.getElementById("S(m,n)").textContent = b_stirling;
+        }
+        function computePowerFormula() {
+            const n = parseInt(document.getElementById("bonus_n").value);
+            const m = parseInt(document.getElementById("bonus_m").value);
+            document.getElementById("n^m").textContent = powerFormula(n, m);
+        }
+
+        function computeStirlingFactorialFormula() {
+            const n = parseInt(document.getElementById("bonus_n").value);
+            const m = parseInt(document.getElementById("bonus_m").value);
+            document.getElementById("n!S(m,n)").textContent = stirlingFactorialFormula(m, n);
+        }
+
+        function computeSumOfStirlingNumbers() {
+            const n = parseInt(document.getElementById("bonus_n").value);
+            const m = parseInt(document.getElementById("bonus_m").value);
+            document.getElementById("sumS(m,n)").textContent = sumOfStirlingNumbers(m, n);
+        }
+
+        function computeBinomialFormula() {
+            const n = parseInt(document.getElementById("bonus_n").value);
+            const m = parseInt(document.getElementById("bonus_m").value);
+            document.getElementById("(n+m-1,m)").textContent = binomialFormula(m, n);
+        }
+
+        function computeAdjustedBinomialFormula() {
+            const n = parseInt(document.getElementById("bonus_n").value);
+            const m = parseInt(document.getElementById("bonus_m").value);
+            document.getElementById("(m-1,m-n)").textContent = adjustedBinomialFormula(m, n);
+        }
+
+        function computePartitionNumbers() {
+            const n = parseInt(document.getElementById("bonus_n").value);
+            const m = parseInt(document.getElementById("bonus_m").value);
+            document.getElementById("p(m,n)").textContent = partitionNumbers(m, n);
+        }
+
+        function computeSumOfPartitionNumbers() {
+            const n = parseInt(document.getElementById("bonus_n").value);
+            const m = parseInt(document.getElementById("bonus_m").value);
+            document.getElementById("sump(m,n)").textContent = sumOfPartitionNumbers(m, n);
+        }
+
+        
+
+
+
+        // Compute all results (combinatorial and sequences)
+        function computeAll() {
+            computePermutation();
+            computeCombination();
+            computeArrangementWithRep();
+            computeSelectionWithRep();
+        }
+
+        function computeAllSequences() {
+            computeCatalanNumbers();
+            computeTriangularNumbers();
+            computeHarmonicNumbers();
+            computeFibonacciNumbers();
+            computeLucasNumbers();
+        }
+
+        function computeAllBonus() {
+            computePowerFormula()
+            b_computeStirlingNumbers()
+            computeStirlingFactorialFormula()
+            computeSumOfStirlingNumbers()
+            computeBinomialFormula()
+            computeAdjustedBinomialFormula()
+            computePartitionNumbers()
+            computeSumOfPartitionNumbers()
+        }
+    </script>
+    <!-- 下雪效果 -->
+    <div class="loader">
+        <div class="initial-snow">
+            <script>
+                for (let i = 0; i < 50; i++) {
+                    document.write('<div class="snow">&#10052;</div>');
+                }
+            </script>
+        </div>
+    </div>
+</body>
+<footer>
+    <p>&copy; 2024 Shih Ting Lin. All rights reserved.</p>
+</footer>
+<script>
+    const snowflakes = document.querySelectorAll('.snow');
+    snowflakes.forEach((snowflake, i) => {
+        const size = Math.random() * 2 + 0.5; // 隨機大小
+        const ini = `${Math.random() * 100 - 50}vw`;
+        const end = `${Math.random() * 100 - 50}vw`;
+        snowflake.style.left = `${Math.random() * 100}vw`;
+        snowflake.style.fontSize = `${size}em`;
+        snowflake.style.animation = `snowfall ${Math.random() * 10 + 5}s linear infinite`;
+        snowflake.style.setProperty('--left-ini', ini);
+        snowflake.style.setProperty('--left-end', end);
+    });
+</script>
+</html>
